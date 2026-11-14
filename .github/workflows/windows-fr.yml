@@ -1,0 +1,35 @@
+name: Windows (version française)
+
+on:
+  push:
+    branches:
+      - francais
+  workflow_dispatch:
+
+jobs:
+  build_windows_fr:
+    name: Compilation Windows x64
+    runs-on: windows-2022
+    steps:
+      - uses: actions/checkout@v6
+      - name: Sous-modules
+        run: git submodule update --init
+        shell: bash
+      - name: Compilation
+        shell: bash
+        run: |
+          mkdir build
+          cd build
+          cmake -G "Visual Studio 17 2022" \
+            -DCMAKE_BUILD_TYPE=RelWithDebInfo \
+            -DENABLE_OPENMP=OFF \
+            -DENABLE_LTO=ON \
+            -DCMAKE_GENERATOR_PLATFORM=x64 \
+            ..
+          cmake --build . --config RelWithDebInfo --target solvespace -- -maxcpucount
+          mv bin/RelWithDebInfo/solvespace.exe bin/RelWithDebInfo/solvespace-3.3-fr.exe
+      - name: Envoi du programme
+        uses: actions/upload-artifact@v6
+        with:
+          name: solvespace-3.3-fr-windows-x64
+          path: build/bin/RelWithDebInfo/solvespace-3.3-fr.exe
