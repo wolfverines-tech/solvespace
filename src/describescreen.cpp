@@ -96,9 +96,9 @@ void TextWindow::DescribeSelection() {
         char abc = 'A';
         for(auto &fc : gs.face) {
             Vector n = SK.GetEntity(fc)->FaceGetNormalNum();
-            Printf(true, " plane%c normal = " PT_AS_NUM, abc, CO(n));
+            Printf(true, " plan%c normale = " PT_AS_NUM, abc, CO(n));
             Vector p = SK.GetEntity(fc)->FaceGetPointNum();
-            Printf(false, "   plane%c thru = " PT_AS_STR, abc, COSTR(SK.GetEntity(fc), p));
+            Printf(false, " plan%c passe par = " PT_AS_STR, abc, COSTR(SK.GetEntity(fc), p));
             ++abc;
         }
     };
@@ -116,7 +116,7 @@ void TextWindow::DescribeSelection() {
             case Entity::Type::POINT_N_ROT_AA:
             case Entity::Type::POINT_N_ROT_AXIS_TRANS:
                 p = e->PointGetNum();
-                Printf(false, "%FtPOINT%E at " PT_AS_STR, COSTR(e, p));
+                Printf(false, "%FtPOINT%E en " PT_AS_STR, COSTR(e, p));
                 break;
 
             case Entity::Type::NORMAL_IN_3D:
@@ -126,8 +126,8 @@ void TextWindow::DescribeSelection() {
             case Entity::Type::NORMAL_N_ROT_AA: {
                 Quaternion q = e->NormalGetNum();
                 p = q.RotationN();
-                Printf(false, "%FtNORMAL / COORDINATE SYSTEM%E");
-                Printf(true,  "  basis n = " PT_AS_NUM, CO(p));
+                Printf(false, "%FtNORMALE / REPÈRE%E");
+                Printf(true,  "  base n = " PT_AS_NUM, CO(p));
                 p = q.RotationU();
                 Printf(false, "        u = " PT_AS_NUM, CO(p));
                 p = q.RotationV();
@@ -136,22 +136,22 @@ void TextWindow::DescribeSelection() {
             }
             case Entity::Type::WORKPLANE: {
                 p = SK.GetEntity(e->point[0])->PointGetNum();
-                Printf(false, "%FtWORKPLANE%E");
-                Printf(true, "   origin = " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
+                Printf(false, "%FtPLAN DE TRAVAIL%E");
+                Printf(true, "   origine = " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
                 Quaternion q = e->Normal()->NormalGetNum();
                 p = q.RotationN();
-                Printf(true, "   normal = " PT_AS_NUM_LINK, CO_LINK(e->Normal(), p));
+                Printf(true, "   normale = " PT_AS_NUM_LINK, CO_LINK(e->Normal(), p));
                 break;
             }
             case Entity::Type::LINE_SEGMENT: {
                 Vector p0 = SK.GetEntity(e->point[0])->PointGetNum();
                 p = p0;
-                Printf(false, "%FtLINE SEGMENT%E");
-                Printf(true,  "   thru " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
+                Printf(false, "%FtSEGMENT DE LIGNE%E");
+                Printf(true,  "   passe par " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
                 Vector p1 = SK.GetEntity(e->point[1])->PointGetNum();
                 p = p1;
                 Printf(false, "        " PT_AS_STR, COSTR(SK.GetEntity(e->point[1]), p));
-                Printf(true,  "   len = %Fi%s%E",
+                Printf(true,  "   longueur = %Fi%s%E",
                     SS.MmToString((p1.Minus(p0).Magnitude())).c_str());
                 break;
             }
@@ -159,13 +159,13 @@ void TextWindow::DescribeSelection() {
             case Entity::Type::CUBIC:
                 int pts;
                 if(e->type == Entity::Type::CUBIC_PERIODIC) {
-                    Printf(false, "%FtPERIODIC C2 CUBIC SPLINE%E");
+                    Printf(false, "%FtSPLINE CUBIQUE C2 PÉRIODIQUE%E");
                     pts = (3 + e->extraPoints);
                 } else if(e->extraPoints > 0) {
-                    Printf(false, "%FtINTERPOLATING C2 CUBIC SPLINE%E");
+                    Printf(false, "%FtSPLINE CUBIQUE C2 D'INTERPOLATION%E");
                     pts = (4 + e->extraPoints);
                 } else {
-                    Printf(false, "%FtCUBIC BEZIER CURVE%E");
+                    Printf(false, "%FtCOURBE DE BÉZIER CUBIQUE%E");
                     pts = 4;
                 }
                 for(int i = 0; i < pts; i++) {
@@ -175,29 +175,29 @@ void TextWindow::DescribeSelection() {
                 break;
 
             case Entity::Type::ARC_OF_CIRCLE: {
-                Printf(false, "%FtARC OF A CIRCLE%E");
+                Printf(false, "%FtARC DE CERCLE%E");
                 p = SK.GetEntity(e->point[0])->PointGetNum();
-                Printf(true,  "     center = " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
+                Printf(true,  "     centre = " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
                 p = SK.GetEntity(e->point[1])->PointGetNum();
-                Printf(true,  "  endpoints = " PT_AS_STR, COSTR(SK.GetEntity(e->point[1]), p));
+                Printf(true,  " extrémités = " PT_AS_STR, COSTR(SK.GetEntity(e->point[1]), p));
                 p = SK.GetEntity(e->point[2])->PointGetNum();
                 Printf(false, "              " PT_AS_STR, COSTR(SK.GetEntity(e->point[2]), p));
                 double r = e->CircleGetRadiusNum();
-                Printf(true, "   diameter =  %Fi%s", SS.MmToString(r*2).c_str());
-                Printf(false, "     radius =  %Fi%s", SS.MmToString(r).c_str());
+                Printf(true, "   diamètre =  %Fi%s", SS.MmToString(r*2).c_str());
+                Printf(false, "      rayon =  %Fi%s", SS.MmToString(r).c_str());
                 double thetas, thetaf, dtheta;
                 e->ArcGetAngles(&thetas, &thetaf, &dtheta);
-                Printf(false, "    arc len =  %Fi%s", SS.MmToString(dtheta*r).c_str());
+                Printf(false, " long. arc =  %Fi%s", SS.MmToString(dtheta*r).c_str());
                 break;
             }
             case Entity::Type::CIRCLE: {
-                Printf(false, "%FtCIRCLE%E");
+                Printf(false, "%FtCERCLE%E");
                 p = SK.GetEntity(e->point[0])->PointGetNum();
-                Printf(true,  "        center = " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
+                Printf(true,  "        centre = " PT_AS_STR, COSTR(SK.GetEntity(e->point[0]), p));
                 double r = e->CircleGetRadiusNum();
-                Printf(true,  "      diameter =  %Fi%s", SS.MmToString(r*2).c_str());
-                Printf(false, "        radius =  %Fi%s", SS.MmToString(r).c_str());
-                Printf(false, " circumference =  %Fi%s", SS.MmToString(2*M_PI*r).c_str());
+                Printf(true,  "      diamètre =  %Fi%s", SS.MmToString(r*2).c_str());
+                Printf(false, "         rayon =  %Fi%s", SS.MmToString(r).c_str());
+                Printf(false, "     périmètre =  %Fi%s", SS.MmToString(2*M_PI*r).c_str());
                 break;
             }
             case Entity::Type::FACE_NORMAL_PT:
@@ -207,23 +207,23 @@ void TextWindow::DescribeSelection() {
             case Entity::Type::FACE_N_TRANS:
             case Entity::Type::FACE_ROT_NORMAL_PT:
             case Entity::Type::FACE_N_ROT_AXIS_TRANS:
-                  Printf(false, "%FtPLANE FACE%E");
+                  Printf(false, "%FtFACE PLANE%E");
                 p = e->FaceGetNormalNum();
-                Printf(true,  "   normal = " PT_AS_NUM, CO(p));
+                Printf(true,  "   normale = " PT_AS_NUM, CO(p));
                 p = e->FaceGetPointNum();
-                Printf(false, "     thru = " PT_AS_STR, COSTR(e, p));
+                Printf(false, " passe par = " PT_AS_STR, COSTR(e, p));
                 break;
 
             case Entity::Type::TTF_TEXT: {
-                Printf(false, "%FtTRUETYPE FONT TEXT%E");
-                Printf(true, "  font = '%Fi%s%E'", e->font.c_str());
+                Printf(false, "%FtTEXTE EN POLICE TRUETYPE%E");
+                Printf(true, "  police = '%Fi%s%E'", e->font.c_str());
                 if(e->h.isFromRequest()) {
-                    Printf(true, "  text = '%Fi%s%E' %Fl%Ll%f%D[change]%E",
+                    Printf(true, "  texte = '%Fi%s%E' %Fl%Ll%f%D[modifier]%E",
                         e->str.c_str(), &ScreenEditTtfText, e->h.request().v);
-                    Printf(true, "  %Fd%f%D%Ll%s  apply kerning",
+                    Printf(true, "  %Fd%f%D%Ll%s  appliquer le crénage",
                            &ScreenToggleTtfKerning, e->h.request().v,
                            e->extraPoints ? CHECK_TRUE : CHECK_FALSE);
-                    Printf(true, "  select new font");
+                    Printf(true, "  choisir une nouvelle police");
                     SS.fonts.LoadAll();
                     // Not using range-for here because we use i inside the output.
                     for(int i = 0; i < SS.fonts.l.n; i++) {
@@ -241,7 +241,7 @@ void TextWindow::DescribeSelection() {
                         }
                     }
                 } else {
-                    Printf(false, "  text = '%Fi%s%E'", e->str.c_str());
+                    Printf(false, "  texte = '%Fi%s%E'", e->str.c_str());
                 }
                 break;
             }
@@ -249,15 +249,15 @@ void TextWindow::DescribeSelection() {
                 Printf(false, "%FtIMAGE%E");
                 Platform::Path relativePath = e->file.RelativeTo(SS.saveFile.Parent());
                 if(relativePath.IsEmpty()) {
-                    Printf(true, "  file = '%Fi%s%E'", e->file.raw.c_str());
+                    Printf(true, "  fichier = '%Fi%s%E'", e->file.raw.c_str());
                 } else {
-                    Printf(true, "  file = '%Fi%s%E'", relativePath.raw.c_str());
+                    Printf(true, "  fichier = '%Fi%s%E'", relativePath.raw.c_str());
                 }
                 break;
             }
 
             default:
-                Printf(true, "%Ft?? ENTITY%E");
+                Printf(true, "%Ft?? ENTITÉ%E");
                 break;
         }
 
@@ -265,29 +265,29 @@ void TextWindow::DescribeSelection() {
         if(e->h.isFromRequest()) {
             Request *r = SK.GetRequest(e->h.request());
             if(e->h == r->h.entity(0)) {
-                Printf(false, "%FtFROM REQUEST%E  %s",
+                Printf(false, "%FtCRÉÉ PAR%E     %s",
                     r->DescriptionString().c_str());
             } else {
-                Printf(false, "%FtFROM REQUEST%E  %Fl%Ll%D%f%h%s%E",
+                Printf(false, "%FtCRÉÉ PAR%E     %Fl%Ll%D%f%h%s%E",
                     r->h.v, (&TextWindow::ScreenSelectRequest), &(TextWindow::ScreenHoverRequest),
                     r->DescriptionString().c_str());
             }
         }
         Group *g = SK.GetGroup(e->group);
-        Printf(false, "%FtIN GROUP%E      %Fl%Ll%D%f%s%E",
+        Printf(false, "%FtGROUPE%E       %Fl%Ll%D%f%s%E",
             g->h.v, (&TextWindow::ScreenSelectGroup),
             g->DescriptionString().c_str());
         if(e->workplane == Entity::FREE_IN_3D) {
-            Printf(false, "%FtNOT LOCKED IN WORKPLANE%E");
+            Printf(false, "%FtNON LIÉ À UN PLAN DE TRAVAIL%E");
         } else {
             Entity *w = SK.GetEntity(e->workplane);
             if(w->h.isFromRequest()) {
-                Printf(false, "%FtIN WORKPLANE%E  %Fl%Ll%D%f%h%s%E",
+                Printf(false, "%FtPLAN%E         %Fl%Ll%D%f%h%s%E",
                     w->h.request().v,
                     (&TextWindow::ScreenSelectRequest), &(TextWindow::ScreenHoverRequest),
                     w->DescriptionString().c_str());
             } else {
-                Printf(false, "%FtIN WORKPLANE%E  %Fl%Ll%D%f%h%s%E",
+                Printf(false, "%FtPLAN%E         %Fl%Ll%D%f%h%s%E",
                     w->h.group().v,
                     (&TextWindow::ScreenSelectGroup), (&TextWindow::ScreenHoverGroupWorkplane),
                     w->DescriptionString().c_str());
@@ -296,11 +296,11 @@ void TextWindow::DescribeSelection() {
         if(e->IsStylable()) {
             if(e->style.v) {
                 Style *s = Style::Get(e->style);
-                Printf(false, "%FtIN STYLE%E      %Fl%Ll%D%f%s%E",
+                Printf(false, "%FtSTYLE%E        %Fl%Ll%D%f%s%E",
                     s->h.v, (&TextWindow::ScreenShowStyleInfo),
                     s->DescriptionString().c_str());
             } else {
-                Printf(false, "%FtIN STYLE%E      none");
+                Printf(false, "%FtSTYLE%E        aucun");
             }
         }
         if(e->construction) {
@@ -336,9 +336,9 @@ void TextWindow::DescribeSelection() {
                 if(first) {
                     first = false;
                     if(reference) {
-                        Printf(true, "%FtMEASURED BY:%E");
+                        Printf(true, "%FtMESURÉ PAR :%E");
                     } else {
-                        Printf(true, "%FtCONSTRAINED BY:%E");
+                        Printf(true, "%FtCONTRAINT PAR :%E");
                     }
                 }
                 Printf(false, "%Bp   %Fl%Ll%D%f%h%s%E",
@@ -352,9 +352,9 @@ void TextWindow::DescribeSelection() {
         ListConstraints(/*reference=*/false);
         ListConstraints(/*reference=*/true);
     } else if(gs.n == 2 && gs.points == 2) {
-        Printf(false, "%FtTWO POINTS");
+        Printf(false, "%FtDEUX POINTS");
         Vector p0 = SK.GetEntity(gs.point[0])->PointGetNum();
-        Printf(true,  "   at " PT_AS_STR, COSTR(SK.GetEntity(gs.point[0]), p0));
+        Printf(true,  "   en " PT_AS_STR, COSTR(SK.GetEntity(gs.point[0]), p0));
         Vector p1 = SK.GetEntity(gs.point[1])->PointGetNum();
         Printf(false, "      " PT_AS_STR, COSTR(SK.GetEntity(gs.point[1]), p1));
         Vector dv = p1.Minus(p0);
@@ -363,78 +363,78 @@ void TextWindow::DescribeSelection() {
     } else if(gs.n == 2 && gs.points == 1 && gs.circlesOrArcs == 1) {
         Entity *ec = SK.GetEntity(gs.entity[0]);
         if(ec->type == Entity::Type::CIRCLE) {
-            Printf(false, "%FtPOINT AND A CIRCLE");
+            Printf(false, "%FtUN POINT ET UN CERCLE");
         } else if(ec->type == Entity::Type::ARC_OF_CIRCLE) {
-            Printf(false, "%FtPOINT AND AN ARC");
+            Printf(false, "%FtUN POINT ET UN ARC");
         } else ssassert(false, "Unexpected entity type");
         Vector p = SK.GetEntity(gs.point[0])->PointGetNum();
-        Printf(true,  "        pt at " PT_AS_STR, COSTR(SK.GetEntity(gs.point[0]), p));
+        Printf(true,  "     point en " PT_AS_STR, COSTR(SK.GetEntity(gs.point[0]), p));
         Vector c = SK.GetEntity(ec->point[0])->PointGetNum();
-        Printf(true,  "     center = " PT_AS_STR, COSTR(SK.GetEntity(ec->point[0]), c));
+        Printf(true,  "     centre = " PT_AS_STR, COSTR(SK.GetEntity(ec->point[0]), c));
         double r = ec->CircleGetRadiusNum();
-        Printf(false, "   diameter =  %Fi%s", SS.MmToString(r*2).c_str());
-        Printf(false, "     radius =  %Fi%s", SS.MmToString(r).c_str());
+        Printf(false, "   diamètre =  %Fi%s", SS.MmToString(r*2).c_str());
+        Printf(false, "      rayon =  %Fi%s", SS.MmToString(r).c_str());
         double d = (p.Minus(c)).Magnitude() - r;
         Printf(true,  "   distance = %Fi%s", SS.MmToString(d).c_str());
     } else if(gs.n == 2 && gs.faces == 1 && gs.points == 1) {
-        Printf(false, "%FtA POINT AND A PLANE FACE");
+        Printf(false, "%FtUN POINT ET UNE FACE PLANE");
         Vector pt = SK.GetEntity(gs.point[0])->PointGetNum();
         Printf(true,  "        point = " PT_AS_STR, COSTR(SK.GetEntity(gs.point[0]), pt));
         Vector n = SK.GetEntity(gs.face[0])->FaceGetNormalNum();
-        Printf(true,  " plane normal = " PT_AS_NUM, CO(n));
+        Printf(true,  " normale plan = " PT_AS_NUM, CO(n));
         Vector pl = SK.GetEntity(gs.face[0])->FaceGetPointNum();
-        Printf(false, "   plane thru = " PT_AS_STR, COSTR(SK.GetEntity(gs.face[0]), pl));
+        Printf(false, " plan passe par = " PT_AS_STR, COSTR(SK.GetEntity(gs.face[0]), pl));
         double dd = n.Dot(pl) - n.Dot(pt);
         Printf(true,  "     distance = %Fi%s", SS.MmToString(dd).c_str());
     } else if(gs.n == 3 && gs.points == 2 && gs.vectors == 1) {
-        Printf(false, "%FtTWO POINTS AND A VECTOR");
+        Printf(false, "%FtDEUX POINTS ET UN VECTEUR");
         Vector p0 = SK.GetEntity(gs.point[0])->PointGetNum();
         Printf(true,  "  pointA = " PT_AS_STR, COSTR(SK.GetEntity(gs.point[0]), p0));
         Vector p1 = SK.GetEntity(gs.point[1])->PointGetNum();
         Printf(false, "  pointB = " PT_AS_STR, COSTR(SK.GetEntity(gs.point[1]), p1));
         Vector v  = SK.GetEntity(gs.vector[0])->VectorGetNum();
         v = v.WithMagnitude(1);
-        Printf(true,  "  vector = " PT_AS_NUM_LINK, CO_LINK(SK.GetEntity(gs.vector[0]), v));
+        Printf(true,  "  vecteur = " PT_AS_NUM_LINK, CO_LINK(SK.GetEntity(gs.vector[0]), v));
         double d = (p1.Minus(p0)).Dot(v);
         Printf(true,  "  proj_d = %Fi%s", SS.MmToString(d).c_str());
     } else if(gs.n == 2 && gs.lineSegments == 1 && gs.points == 1) {
         Entity *ln = SK.GetEntity(gs.entity[0]);
         Vector lp0 = SK.GetEntity(ln->point[0])->PointGetNum(),
                lp1 = SK.GetEntity(ln->point[1])->PointGetNum();
-        Printf(false, "%FtLINE SEGMENT AND POINT%E");
-        Printf(true,  "   ln thru " PT_AS_STR, COSTR(SK.GetEntity(ln->point[0]), lp0));
+        Printf(false, "%FtSEGMENT DE LIGNE ET POINT%E");
+        Printf(true,  " ligne par " PT_AS_STR, COSTR(SK.GetEntity(ln->point[0]), lp0));
         Printf(false, "           " PT_AS_STR, COSTR(SK.GetEntity(ln->point[1]), lp1));
         Entity *p  = SK.GetEntity(gs.point[0]);
         Vector pp = p->PointGetNum();
         Printf(true,  "     point " PT_AS_STR, COSTR(p, pp));
-        Printf(true,  " pt-ln distance = %Fi%s%E",
+        Printf(true,  " distance pt-ligne = %Fi%s%E",
             SS.MmToString(pp.DistanceToLine(lp0, lp1.Minus(lp0))).c_str());
         hEntity wrkpl = SS.GW.ActiveWorkplane();
         if(wrkpl != Entity::FREE_IN_3D && !(p->workplane == wrkpl && ln->workplane == wrkpl)) {
             Vector ppw  = pp.ProjectInto(wrkpl);
             Vector lp0w = lp0.ProjectInto(wrkpl);
             Vector lp1w = lp1.ProjectInto(wrkpl);
-            Printf(false, "    or distance = %Fi%s%E (in workplane)",
+            Printf(false, "      ou distance = %Fi%s%E (dans le plan)",
                 SS.MmToString(ppw.DistanceToLine(lp0w, lp1w.Minus(lp0w))).c_str());
         }
     } else if(gs.n == 2 && gs.vectors == 2) {
-        Printf(false, "%FtTWO VECTORS");
+        Printf(false, "%FtDEUX VECTEURS");
 
         Vector v0 = SK.GetEntity(gs.entity[0])->VectorGetNum(),
                v1 = SK.GetEntity(gs.entity[1])->VectorGetNum();
         v0 = v0.WithMagnitude(1);
         v1 = v1.WithMagnitude(1);
 
-        Printf(true,  "  vectorA = " PT_AS_NUM_LINK, CO_LINK(SK.GetEntity(gs.entity[0]), v0));
-        Printf(false, "  vectorB = " PT_AS_NUM_LINK, CO_LINK(SK.GetEntity(gs.entity[1]), v1));
+        Printf(true,  "  vecteurA = " PT_AS_NUM_LINK, CO_LINK(SK.GetEntity(gs.entity[0]), v0));
+        Printf(false, "  vecteurB = " PT_AS_NUM_LINK, CO_LINK(SK.GetEntity(gs.entity[1]), v1));
 
         double theta = acos(v0.Dot(v1));
-        Printf(true,  "    angle = %Fi%2%E degrees", theta*180/PI);
+        Printf(true,  "    angle = %Fi%2%E degrés", theta*180/PI);
         while(theta < PI/2) theta += PI;
         while(theta > PI/2) theta -= PI;
-        Printf(false, " or angle = %Fi%2%E (mod 180)", theta*180/PI);
+        Printf(false, " ou angle = %Fi%2%E (mod 180)", theta*180/PI);
     } else if(gs.n == 2 && gs.faces == 2) {
-        Printf(false, "%FtTWO PLANE FACES");
+        Printf(false, "%FtDEUX FACES PLANES");
 
         ListFaces();
 
@@ -442,10 +442,10 @@ void TextWindow::DescribeSelection() {
         Vector n1 = SK.GetEntity(gs.face[1])->FaceGetNormalNum();
 
         double theta = acos(n0.Dot(n1));
-        Printf(true,  "         angle = %Fi%2%E degrees", theta*180/PI);
+        Printf(true,  "         angle = %Fi%2%E degrés", theta*180/PI);
         while(theta < PI/2) theta += PI;
         while(theta > PI/2) theta -= PI;
-        Printf(false, "      or angle = %Fi%2%E (mod 180)", theta*180/PI);
+        Printf(false, "      ou angle = %Fi%2%E (mod 180)", theta*180/PI);
 
         if(fabs(theta) < 0.01) {
             Vector p0 = SK.GetEntity(gs.face[0])->FaceGetPointNum();
@@ -455,7 +455,7 @@ void TextWindow::DescribeSelection() {
             Printf(true,  "      distance = %Fi%s", SS.MmToString(d).c_str());
         }
     } else if(gs.n == 3 && gs.faces == 3) {
-        Printf(false, "%FtTHREE PLANE FACES");
+        Printf(false, "%FtTROIS FACES PLANES");
 
         ListFaces();
 
@@ -466,44 +466,44 @@ void TextWindow::DescribeSelection() {
         const std::string &desc = c->DescriptionString().c_str();
 
         if(c->type == Constraint::Type::COMMENT) {
-            Printf(false, "%FtCOMMENT%E  %s", desc.c_str());
+            Printf(false, "%FtCOMMENTAIRE%E  %s", desc.c_str());
             if(c->ptA != Entity::NO_ENTITY) {
                 Vector p = SK.GetEntity(c->ptA)->PointGetNum();
-                Printf(true,  "  attached to point at: " PT_AS_STR, COSTR(SK.GetEntity(c->ptA), p));
+                Printf(true,  "  attaché au point en : " PT_AS_STR, COSTR(SK.GetEntity(c->ptA), p));
                 Vector dv = c->disp.offset;
                 Printf(false, "    distance = %Fi%s", SS.MmToString(dv.Magnitude()).c_str());
                 Printf(false, "  d(x, y, z) = " PT_AS_STR_NO_LINK, COSTR_NO_LINK(dv));
             }
         } else if(c->HasLabel()) {
             if(c->reference) {
-                Printf(false, "%FtREFERENCE%E  %s", desc.c_str());
+                Printf(false, "%FtCOTE INDICATIVE%E  %s", desc.c_str());
             } else {
-                Printf(false, "%FtDIMENSION%E  %s", desc.c_str());
+                Printf(false, "%FtCOTE%E  %s", desc.c_str());
             }
-            Printf(true, "  %Fd%f%D%Ll%s  reference",
+            Printf(true, "  %Fd%f%D%Ll%s  indicative",
                    &ScreenConstraintToggleReference, gs.constraint[0].v,
                    c->reference ? CHECK_TRUE : CHECK_FALSE);
             if(c->type == Constraint::Type::DIAMETER) {
-                Printf(false, "  %Fd%f%D%Ll%s  use radius",
+                Printf(false, "  %Fd%f%D%Ll%s  coter le rayon",
                        &ScreenConstraintShowAsRadius, gs.constraint[0].v,
                        c->other ? CHECK_TRUE : CHECK_FALSE);
             }
         } else {
-            Printf(false, "%FtCONSTRAINT%E  %s", desc.c_str());
+            Printf(false, "%FtCONTRAINTE%E  %s", desc.c_str());
         }
 
         if(c->IsProjectible()) {
             if(c->workplane == Entity::FREE_IN_3D) {
-                Printf(true, "%FtNOT PROJECTED TO WORKPLANE%E");
+                Printf(true, "%FtNON PROJETÉE SUR UN PLAN DE TRAVAIL%E");
             } else {
                 Entity *w = SK.GetEntity(c->workplane);
                 if(w->h.isFromRequest()) {
-                    Printf(true, "%FtIN WORKPLANE%E  %Fl%Ll%D%f%h%s%E",
+                    Printf(true, "%FtPLAN%E         %Fl%Ll%D%f%h%s%E",
                         w->h.request().v,
                         (&TextWindow::ScreenSelectRequest), &(TextWindow::ScreenHoverRequest),
                         w->DescriptionString().c_str());
                 } else {
-                    Printf(true, "%FtIN WORKPLANE%E  %Fl%Ll%D%f%h%s%E",
+                    Printf(true, "%FtPLAN%E         %Fl%Ll%D%f%h%s%E",
                         w->h.group().v,
                         (&TextWindow::ScreenSelectGroup), (&TextWindow::ScreenHoverGroupWorkplane),
                         w->DescriptionString().c_str());
@@ -526,9 +526,9 @@ void TextWindow::DescribeSelection() {
 
         if(!lhe.empty()) {
             if(c->reference) {
-                Printf(true, "%FtMEASURES:%E");
+                Printf(true, "%FtMESURE :%E");
             } else {
-                Printf(true, "%FtCONSTRAINS:%E");
+                Printf(true, "%FtCONTRAINT :%E");
             }
 
             int a = 0;
@@ -544,7 +544,7 @@ void TextWindow::DescribeSelection() {
         }
     } else {
         int n = SS.GW.selection.n;
-        Printf(false, "%FtSELECTED:%E %d item%s", n, n == 1 ? "" : "s");
+        Printf(false, "%FtSÉLECTION :%E %d élément%s", n, n == 1 ? "" : "s");
     }
 
     if(shown.screen == Screen::STYLE_INFO &&
@@ -553,7 +553,7 @@ void TextWindow::DescribeSelection() {
         // If we are showing a screen for a particular style, then offer the
         // option to assign our selected entities to that style.
         Style *s = Style::Get(shown.style);
-        Printf(true, "%Fl%D%f%Ll(assign to style %s)%E",
+        Printf(true, "%Fl%D%f%Ll(appliquer le style %s)%E",
             shown.style.v,
             &ScreenAssignSelectionToStyle,
             s->DescriptionString().c_str());
@@ -574,12 +574,12 @@ void TextWindow::DescribeSelection() {
         }
     }
     if(styleAssigned) {
-        Printf(true, "%Fl%D%f%Ll(remove assigned style)%E",
+        Printf(true, "%Fl%D%f%Ll(retirer le style appliqué)%E",
             0,
             &ScreenAssignSelectionToStyle);
     }
 
-    Printf(true, "%Fl%f%Ll(unselect all)%E", &TextWindow::ScreenUnselectAll);
+    Printf(true, "%Fl%f%Ll(tout désélectionner)%E", &TextWindow::ScreenUnselectAll);
 }
 
 void TextWindow::GoToScreen(Screen screen) {

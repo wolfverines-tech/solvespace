@@ -213,14 +213,14 @@ std::string Request::DescriptionString() const {
         s = "#ZX";
     } else {
         switch(type) {
-            case Type::WORKPLANE:       s = "workplane";      break;
-            case Type::DATUM_POINT:     s = "datum-point";    break;
-            case Type::LINE_SEGMENT:    s = "line-segment";   break;
-            case Type::CUBIC:           s = "cubic-bezier";   break;
-            case Type::CUBIC_PERIODIC:  s = "periodic-cubic"; break;
-            case Type::CIRCLE:          s = "circle";         break;
-            case Type::ARC_OF_CIRCLE:   s = "arc-of-circle";  break;
-            case Type::TTF_TEXT:        s = "ttf-text";       break;
+            case Type::WORKPLANE:       s = "plan-de-travail";      break;
+            case Type::DATUM_POINT:     s = "point";    break;
+            case Type::LINE_SEGMENT:    s = "segment";   break;
+            case Type::CUBIC:           s = "bézier-cubique";   break;
+            case Type::CUBIC_PERIODIC:  s = "cubique-périodique"; break;
+            case Type::CIRCLE:          s = "cercle";         break;
+            case Type::ARC_OF_CIRCLE:   s = "arc-de-cercle";  break;
+            case Type::TTF_TEXT:        s = "texte-ttf";       break;
             case Type::IMAGE:           s = "image";          break;
         }
     }

@@ -21,16 +21,16 @@ void TextWindow::ShowHeader(bool withNav) {
     const char *header;
     std::string desc;
     if(SS.GW.LockedInWorkplane()) {
-        header = "in plane: ";
+        header = "dans le plan : ";
         desc = SK.GetEntity(SS.GW.ActiveWorkplane())->DescriptionString();
     } else {
-        header = "drawing / constraining in 3d";
+        header = "dessin / contraintes en 3D";
         desc = "";
     }
 
     // Navigation buttons
     if(withNav) {
-        Printf(false, " %Fl%Lh%fhome%E   %Ft%s%E%s",
+        Printf(false, " %Fl%Lh%faccueil%E   %Ft%s%E%s",
             (&TextWindow::ScreenHome), header, desc.c_str());
     } else {
         Printf(false, "        %Ft%s%E%s", header, desc.c_str());
@@ -102,8 +102,8 @@ void TextWindow::ShowListOfGroups() {
                *checkTrue  = " " CHECK_TRUE  " ",
                *checkFalse = " " CHECK_FALSE " ";
 
-    Printf(true, "%Ft active");
-    Printf(false, "%Ft    shown dof group-name%E");
+    Printf(true, "%Ft actif");
+    Printf(false, "%Ft    vu  ddl nom-du-groupe%E");
     bool afterActive = false;
     bool backgroundParity = false;
     for(hGroup hg : SK.groupOrder) {
@@ -163,12 +163,12 @@ void TextWindow::ShowListOfGroups() {
         backgroundParity = !backgroundParity;
     }
 
-    Printf(true, "  %Fl%Ls%fshow all%E / %Fl%Lc%fonly unconstrained%E / %Fl%Lh%fhide all%E",
+    Printf(true, "  %Fl%Ls%ftout voir%E / %Fl%Lc%fnon contraints%E / %Fl%Lh%ftout cacher%E",
         &(TextWindow::ScreenShowGroupsSpecial),
         &(TextWindow::ScreenShowGroupsSpecial),
         &(TextWindow::ScreenShowGroupsSpecial));
-    Printf(true,  "  %Fl%Ls%fline styles%E /"
-                   " %Fl%Ls%fview%E /"
+    Printf(true,  "  %Fl%Ls%fstyles de ligne%E /"
+                   " %Fl%Ls%fvue%E /"
                    " %Fl%Ls%fconfiguration%E",
         &(TextWindow::ScreenShowListOfStyles),
         &(TextWindow::ScreenShowEditView),
@@ -382,30 +382,30 @@ void TextWindow::ShowGroupInfo() {
     const char *s = "???";
 
     if(shown.group == Group::HGROUP_REFERENCES) {
-        Printf(true, "%FtGROUP  %E%s", g->DescriptionString().c_str());
+        Printf(true, "%FtGROUPE  %E%s", g->DescriptionString().c_str());
         goto list_items;
     } else {
-        Printf(true, "%FtGROUP  %E%s [%Fl%Ll%D%frename%E/%Fl%Ll%D%fdel%E]",
+        Printf(true, "%FtGROUPE  %E%s [%Fl%Ll%D%frenommer%E/%Fl%Ll%D%fsuppr.%E]",
             g->DescriptionString().c_str(),
             g->h.v, &TextWindow::ScreenChangeGroupName,
             g->h.v, &TextWindow::ScreenDeleteGroup);
     }
 
     if(g->type == Group::Type::LATHE) {
-        Printf(true, " %Ftlathe plane sketch");
+        Printf(true, " %Fttourner l'esquisse plane");
     } else if(g->type == Group::Type::EXTRUDE || g->type == Group::Type::ROTATE ||
               g->type == Group::Type::TRANSLATE || g->type == Group::Type::REVOLVE ||
               g->type == Group::Type::HELIX) {
         if(g->type == Group::Type::EXTRUDE) {
-            s = "extrude plane sketch";
+            s = "extruder l'esquisse plane";
         } else if(g->type == Group::Type::TRANSLATE) {
-            s = "translate original sketch";
+            s = "translater l'esquisse d'origine";
         } else if(g->type == Group::Type::HELIX) {
-            s = "create helical extrusion";
+            s = "créer une extrusion hélicoïdale";
         } else if(g->type == Group::Type::ROTATE) {
-            s = "rotate original sketch";
+            s = "pivoter l'esquisse d'origine";
         } else if(g->type == Group::Type::REVOLVE) {
-            s = "revolve original sketch";
+            s = "révolution de l'esquisse d'origine";
         }
         Printf(true, " %Ft%s%E", s);
 
@@ -418,9 +418,9 @@ void TextWindow::ShowGroupInfo() {
         
         if (g->type == Group::Type::EXTRUDE) {
         Printf(false,
-            "%Ba   %f%Ls%Fd%s one-sided%E  "
-                  "%f%LS%Fd%s two-sided%E  "
-                  "%f%Lw%Fd%s skewed%E",
+            "%Ba   %f%Ls%Fd%s un côté%E  "
+                  "%f%LS%Fd%s deux côtés%E  "
+                  "%f%Lw%Fd%s inclinée%E",
             &TextWindow::ScreenChangeGroupOption,
             one ? RADIO_TRUE : RADIO_FALSE,
             &TextWindow::ScreenChangeGroupOption,
@@ -429,8 +429,8 @@ void TextWindow::ShowGroupInfo() {
             skew ? CHECK_TRUE : CHECK_FALSE);
         } else {
         Printf(false,
-            "%Ba   %f%Ls%Fd%s one-sided%E  "
-                  "%f%LS%Fd%s two-sided%E",
+            "%Ba   %f%Ls%Fd%s un côté%E  "
+                  "%f%LS%Fd%s deux côtés%E",
             &TextWindow::ScreenChangeGroupOption,
             one ? RADIO_TRUE : RADIO_FALSE,
             &TextWindow::ScreenChangeGroupOption,
@@ -441,8 +441,8 @@ void TextWindow::ShowGroupInfo() {
             if(g->subtype == Group::Subtype::ONE_SIDED) {
                 bool skip = g->skipFirst;
                 Printf(false,
-                   "%Bd   %Ftstart  %f%LK%Fd%s with original%E  "
-                         "%f%Lk%Fd%s with copy #1%E",
+                   "%Bd   %Ftdébut  %f%LK%Fd%s avec l'original%E  "
+                         "%f%Lk%Fd%s avec la copie n°1%E",
                     &ScreenChangeGroupOption,
                     !skip ? RADIO_TRUE : RADIO_FALSE,
                     &ScreenChangeGroupOption,
@@ -450,36 +450,36 @@ void TextWindow::ShowGroupInfo() {
             }
 
             int times = (int)(g->valA);
-            Printf(false, "%Bp   %Ftrepeat%E %d time%s %Fl%Ll%D%f[change]%E",
+            Printf(false, "%Bp   %Ftrépéter%E %d fois%s %Fl%Ll%D%f[modifier]%E",
                 (g->subtype == Group::Subtype::ONE_SIDED) ? 'a' : 'd',
-                times, times == 1 ? "" : "s",
+                times, "",
                 g->h.v, &TextWindow::ScreenChangeExprA);
         }
     } else if(g->type == Group::Type::LINKED) {
-        Printf(true, " %Ftlink geometry from file%E");
+        Printf(true, " %Ftgéométrie liée depuis un fichier%E");
         Platform::Path relativePath = g->linkFile.RelativeTo(SS.saveFile.Parent());
         if(relativePath.IsEmpty()) {
             Printf(false, "%Ba   '%s'", g->linkFile.raw.c_str());
         } else {
             Printf(false, "%Ba   '%s'", relativePath.raw.c_str());
         }
-        Printf(false, "%Bd   %Ftscaled by%E %# %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Bd   %Ftéchelle%E %# %Fl%Ll%f%D[modifier]%E",
             g->scale,
             &TextWindow::ScreenChangeGroupScale, g->h.v);
     } else if(g->type == Group::Type::DRAWING_3D) {
-        Printf(true, " %Ftsketch in 3d%E");
+        Printf(true, " %Ftdessin en 3D%E");
     } else if(g->type == Group::Type::DRAWING_WORKPLANE) {
-        Printf(true, " %Ftsketch in new workplane%E");
+        Printf(true, " %Ftdessin dans un nouveau plan de travail%E");
     } else {
         Printf(true, "???");
     }
     Printf(false, "");
 
     if(g->type == Group::Type::HELIX) {
-        Printf(false, "%Ft pitch - length per turn%E");
+        Printf(false, "%Ft pas - avance par tour%E");
 
         if (fabs(g->valB) != 0.0) {
-            Printf(false, "  %Ba %# %Fl%Ll%f%D[change]%E",
+            Printf(false, "  %Ba %# %Fl%Ll%f%D[modifier]%E",
             g->valB / SS.MmPerUnit(),
             &TextWindow::ScreenChangeHelixPitch, g->h.v);
         } else {
@@ -488,7 +488,7 @@ void TextWindow::ShowGroupInfo() {
               ( (SK.GetParam(g->h.param(3))->val) * SS.MmPerUnit() ),
               &TextWindow::ScreenChangeHelixPitch, g->h.v);
         }
-        Printf(false, "   %Fd%f%LP%s  fixed",
+        Printf(false, "   %Fd%f%LP%s  fixe",
             &TextWindow::ScreenChangePitchOption,
             g->valB != 0 ? CHECK_TRUE : CHECK_FALSE);
 
@@ -503,16 +503,16 @@ void TextWindow::ShowGroupInfo() {
         bool intr = (g->meshCombine == Group::CombineAs::INTERSECTION);
         bool asy  = (g->meshCombine == Group::CombineAs::ASSEMBLE);
 
-        Printf(false, " %Ftsolid model as");
+        Printf(false, " %Ftmodèle solide en");
         Printf(false, "%Ba   %f%D%Lc%Fd%s union%E  "
-                             "%f%D%Lc%Fd%s assemble%E  ",
+                             "%f%D%Lc%Fd%s assemblage%E  ",
             &TextWindow::ScreenChangeGroupOption,
             Group::CombineAs::UNION,
             un ? RADIO_TRUE : RADIO_FALSE,
             &TextWindow::ScreenChangeGroupOption,
             Group::CombineAs::ASSEMBLE,
             (asy ? RADIO_TRUE : RADIO_FALSE));
-        Printf(false, "%Ba   %f%D%Lc%Fd%s difference%E  "
+        Printf(false, "%Ba   %f%D%Lc%Fd%s différence%E  "
                              "%f%D%Lc%Fd%s intersection%E  ",
             &TextWindow::ScreenChangeGroupOption,
             Group::CombineAs::DIFFERENCE,
@@ -524,11 +524,11 @@ void TextWindow::ShowGroupInfo() {
         if(g->type == Group::Type::EXTRUDE || g->type == Group::Type::LATHE ||
            g->type == Group::Type::REVOLVE || g->type == Group::Type::HELIX) {
             Printf(false,
-                "%Bd   %Ftcolor   %E%Bz  %Bd (%@, %@, %@) %f%D%Lf%Fl[change]%E",
+                "%Bd   %Ftcouleur %E%Bz  %Bd (%@, %@, %@) %f%D%Lf%Fl[modifier]%E",
                 &g->color,
                 g->color.redF(), g->color.greenF(), g->color.blueF(),
                 ScreenColor, top[rows-1] + 2);
-            Printf(false, "%Bd   %Ftopacity%E %@ %f%Lf%Fl[change]%E",
+            Printf(false, "%Bd   %Ftopacité%E %@ %f%Lf%Fl[modifier]%E",
                 g->color.alphaF(),
                 &TextWindow::ScreenOpacity);
         }
@@ -536,7 +536,7 @@ void TextWindow::ShowGroupInfo() {
         if(g->type == Group::Type::EXTRUDE || g->type == Group::Type::LATHE ||
            g->type == Group::Type::REVOLVE || g->type == Group::Type::LINKED ||
            g->type == Group::Type::HELIX) {
-            Printf(false, "   %Fd%f%LP%s  suppress this group's solid model",
+            Printf(false, "   %Fd%f%LP%s  désactiver le volume de ce groupe",
                 &TextWindow::ScreenChangeGroupOption,
                 g->suppress ? CHECK_TRUE : CHECK_FALSE);
         }
@@ -544,44 +544,44 @@ void TextWindow::ShowGroupInfo() {
         Printf(false, "");
     }
 
-    Printf(false, " %f%Lv%Fd%s  show entities from this group",
+    Printf(false, " %f%Lv%Fd%s  afficher les entités de ce groupe",
         &TextWindow::ScreenChangeGroupOption,
         g->visible ? CHECK_TRUE : CHECK_FALSE);
 
     if(!g->IsForcedToMeshBySource() && !g->IsTriangleMeshAssembly()) {
-        Printf(false, " %f%Lf%Fd%s  force NURBS surfaces to triangle mesh",
+        Printf(false, " %f%Lf%Fd%s  convertir les surfaces NURBS en maillage",
             &TextWindow::ScreenChangeGroupOption,
             g->forceToMesh ? CHECK_TRUE : CHECK_FALSE);
     } else {
-        Printf(false, " (model already forced to triangle mesh)");
+        Printf(false, " (modèle déjà converti en maillage)");
     }
 
-    Printf(true, " %f%Lr%Fd%s  relax constraints and dimensions",
+    Printf(true, " %f%Lr%Fd%s  assouplir contraintes et cotes",
         &TextWindow::ScreenChangeGroupOption,
         g->relaxConstraints ? CHECK_TRUE : CHECK_FALSE);
 
-    Printf(false, " %f%Le%Fd%s  allow redundant constraints",
+    Printf(false, " %f%Le%Fd%s  autoriser les contraintes redondantes",
         &TextWindow::ScreenChangeGroupOption,
         g->allowRedundant ? CHECK_TRUE : CHECK_FALSE);
 
-    Printf(false, " %f%LD%Fd%s  suppress dof calculation (improves solver performance)",
+    Printf(false, " %f%LD%Fd%s  ne pas calculer les ddl (solveur plus rapide)",
         &TextWindow::ScreenChangeGroupOption,
         g->suppressDofCalculation ? CHECK_TRUE : CHECK_FALSE);
 
-    Printf(false, " %f%Ld%Fd%s  treat all dimensions as reference",
+    Printf(false, " %f%Ld%Fd%s  toutes les cotes en indicatif",
         &TextWindow::ScreenChangeGroupOption,
         g->allDimsReference ? CHECK_TRUE : CHECK_FALSE);
 
     if(g->booleanFailed) {
         Printf(false, "");
-        Printf(false, "The Boolean operation failed. It may be ");
-        Printf(false, "possible to fix the problem by choosing ");
-        Printf(false, "'force NURBS surfaces to triangle mesh'.");
+        Printf(false, "L'opération booléenne a échoué. Il est peut-être ");
+        Printf(false, "possible de corriger le problème en cochant ");
+        Printf(false, "« convertir les surfaces NURBS en maillage ».");
     }
 
 list_items:
     Printf(false, "");
-    Printf(false, "%Ft requests in group");
+    Printf(false, "%Ft éléments du groupe");
 
     int a = 0;
     for(auto &r : SK.request) {
@@ -597,11 +597,11 @@ list_items:
             a++;
         }
     }
-    if(a == 0) Printf(false, "%Ba   (none)");
+    if(a == 0) Printf(false, "%Ba   (aucun)");
 
     a = 0;
     Printf(false, "");
-    Printf(false, "%Ft constraints in group (%d DOF)", g->solved.dof);
+    Printf(false, "%Ft contraintes du groupe (%d ddl)", g->solved.dof);
     for(auto &c : SK.constraint) {
 
         if(c.group == shown.group) {
@@ -612,11 +612,11 @@ list_items:
                    (&TextWindow::ScreenSelectConstraint),
                    (&TextWindow::ScreenHoverConstraint),
                    s.c_str(),
-                   c.reference ? "(ref)" : "");
+                   c.reference ? "(réf)" : "");
             a++;
         }
     }
-    if(a == 0) Printf(false, "%Ba   (none)");
+    if(a == 0) Printf(false, "%Ba   (aucun)");
 }
 
 //-----------------------------------------------------------------------------
@@ -643,25 +643,25 @@ void TextWindow::ShowGroupSolveInfo() {
         return;
     }
 
-    Printf(true, "%FtGROUP   %E%s", g->DescriptionString().c_str());
+    Printf(true, "%FtGROUPE   %E%s", g->DescriptionString().c_str());
     switch(g->solved.how) {
         case SolveResult::DIDNT_CONVERGE:
-            Printf(true, "%FxSOLVE FAILED!%Fd unsolvable constraints");
-            Printf(true, "the following constraints are incompatible");
+            Printf(true, "%FxÉCHEC DU SOLVEUR !%Fd contraintes insolubles");
+            Printf(true, "les contraintes suivantes sont incompatibles");
             break;
 
         case SolveResult::REDUNDANT_DIDNT_CONVERGE:
-            Printf(true, "%FxSOLVE FAILED!%Fd unsolvable constraints");
-            Printf(true, "the following constraints are unsatisfied");
+            Printf(true, "%FxÉCHEC DU SOLVEUR !%Fd contraintes insolubles");
+            Printf(true, "les contraintes suivantes ne sont pas satisfaites");
             break;
 
         case SolveResult::REDUNDANT_OKAY:
-            Printf(true, "%FxSOLVE FAILED!%Fd redundant constraints");
-            Printf(true, "remove any one of these to fix it");
+            Printf(true, "%FxÉCHEC DU SOLVEUR !%Fd contraintes redondantes");
+            Printf(true, "supprimez l'une d'elles pour corriger");
             break;
 
         case SolveResult::TOO_MANY_UNKNOWNS:
-            Printf(true, "Too many unknowns in a single group!");
+            Printf(true, "Trop d'inconnues dans un seul groupe !");
             return;
 
         default: ssassert(false, "Unexpected solve result");
@@ -680,18 +680,18 @@ void TextWindow::ShowGroupSolveInfo() {
     }
 
     if(g->solved.timeout) {
-        Printf(true,  "%FxSome items in list have been omitted%Fd");
-        Printf(false,  "%Fxbecause the operation timed out.%Fd");
+        Printf(true,  "%FxCertains éléments ont été omis de la liste%Fd");
+        Printf(false,  "%Fxcar l'opération a pris trop de temps.%Fd");
     }
 
-    Printf(true,  "It may be possible to fix the problem ");
-    Printf(false, "by selecting Edit -> Undo.");
+    Printf(true,  "Le problème peut peut-être se corriger ");
+    Printf(false, "avec Editer -> Annuler.");
 
     if(g->solved.how == SolveResult::REDUNDANT_OKAY) {
-        Printf(true,  "It is possible to suppress this error ");
-        Printf(false, "by %Fl%f%Llallowing redundant constraints%E in ",
+        Printf(true,  "Pour masquer cette erreur, ");
+        Printf(false, "%Fl%f%Llautorisez les contraintes redondantes%E dans ",
                       &TextWindow::ScreenAllowRedundant);
-        Printf(false, "this group.");
+        Printf(false, "ce groupe.");
     }
 }
 
@@ -763,23 +763,23 @@ void TextWindow::ShowStepDimension() {
         return;
     }
 
-    Printf(true, "%FtSTEP DIMENSION%E %s", c->DescriptionString().c_str());
+    Printf(true, "%FtCOTE PAS-À-PAS%E %s", c->DescriptionString().c_str());
 
     if(stepDim.isDistance) {
-        Printf(true,  "%Ba   %Ftstart%E    %s", SS.MmToString(c->valA).c_str());
-        Printf(false, "%Bd   %Ftfinish%E   %s %Fl%Ll%f[change]%E",
+        Printf(true,  "%Ba   %Ftdébut%E    %s", SS.MmToString(c->valA).c_str());
+        Printf(false, "%Bd   %Ftfin%E      %s %Fl%Ll%f[modifier]%E",
             SS.MmToString(stepDim.finish).c_str(), &ScreenStepDimFinish);
     } else {
-        Printf(true,  "%Ba   %Ftstart%E    %@", c->valA);
-        Printf(false, "%Bd   %Ftfinish%E   %@ %Fl%Ll%f[change]%E",
+        Printf(true,  "%Ba   %Ftdébut%E    %@", c->valA);
+        Printf(false, "%Bd   %Ftfin%E      %@ %Fl%Ll%f[modifier]%E",
             stepDim.finish, &ScreenStepDimFinish);
     }
-    Printf(false, "%Ba   %Ftsteps%E    %d %Fl%Ll%f%D[change]%E",
+    Printf(false, "%Ba   %Ftétapes%E   %d %Fl%Ll%f%D[modifier]%E",
         stepDim.steps, &ScreenStepDimSteps);
 
-    Printf(true, " %Fl%Ll%fstep dimension now%E", &ScreenStepDimGo);
+    Printf(true, " %Fl%Ll%flancer le pas-à-pas%E", &ScreenStepDimGo);
 
-    Printf(true, "(or %Fl%Ll%fcancel operation%E)", &ScreenHome);
+    Printf(true, "(ou %Fl%Ll%fannuler l'opération%E)", &ScreenHome);
 }
 
 //-----------------------------------------------------------------------------
@@ -800,30 +800,30 @@ void TextWindow::ScreenChangeTangentArc(int link, uint32_t v) {
     }
 }
 void TextWindow::ShowTangentArc() {
-    Printf(true, "%FtTANGENT ARC PARAMETERS%E");
+    Printf(true, "%FtPARAMÈTRES DE L'ARC TANGENT%E");
 
-    Printf(true,  "%Ft radius of created arc%E");
+    Printf(true,  "%Ft rayon de l'arc créé%E");
     if(SS.tangentArcManual) {
-        Printf(false, "%Ba   %s %Fl%Lr%f[change]%E",
+        Printf(false, "%Ba   %s %Fl%Lr%f[modifier]%E",
             SS.MmToString(SS.tangentArcRadius).c_str(),
             &(TextWindow::ScreenChangeTangentArc));
     } else {
-        Printf(false, "%Ba   automatic");
+        Printf(false, "%Ba   automatique");
     }
 
     Printf(false, "");
-    Printf(false, "  %Fd%f%La%s  choose radius automatically%E",
+    Printf(false, "  %Fd%f%La%s  rayon automatique%E",
         &ScreenChangeTangentArc,
         !SS.tangentArcManual ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Lm%s  modify original entities%E",
+    Printf(false, "  %Fd%f%Lm%s  modifier les entités d'origine%E",
         &ScreenChangeTangentArc,
         SS.tangentArcModify ? CHECK_TRUE : CHECK_FALSE);
 
     Printf(false, "");
-    Printf(false, "To create a tangent arc at a point,");
-    Printf(false, "select that point and then choose");
-    Printf(false, "Sketch -> Tangent Arc at Point.");
-    Printf(true, "(or %Fl%Ll%fback to home screen%E)", &ScreenHome);
+    Printf(false, "Pour créer un arc tangent en un point,");
+    Printf(false, "sélectionnez ce point puis choisissez");
+    Printf(false, "Dessin -> Rendre l'Arc Tangent au Point.");
+    Printf(true, "(ou %Fl%Ll%fretour à l'accueil%E)", &ScreenHome);
 }
 
 //-----------------------------------------------------------------------------

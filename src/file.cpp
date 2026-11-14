@@ -293,15 +293,15 @@ bool SolveSpaceUI::SaveToFile(const Platform::Path &filename) {
         if(g.linkFile.Expand(/*fromCurrentDirectory=*/true)
                .RelativeTo(filename.Expand(/*fromCurrentDirectory=*/true))
                .IsEmpty()) {
-            Error("This sketch links the sketch '%s'; it can only be saved "
-                  "on the same volume.", g.linkFile.raw.c_str());
+            Error("Ce dessin est lié au dessin '%s' ; il ne peut être enregistré "
+                  "que sur le même disque.", g.linkFile.raw.c_str());
             return false;
         }
     }
 
     fh = OpenFile(filename, "wb");
     if(!fh) {
-        Error("Couldn't write to file '%s'", filename.raw.c_str());
+        Error("Impossible d'écrire dans le fichier '%s'", filename.raw.c_str());
         return false;
     }
 
@@ -479,7 +479,7 @@ bool SolveSpaceUI::LoadFromFile(const Platform::Path &filename, bool canCancel) 
 
     fh = OpenFile(filename, "rb");
     if(!fh) {
-        Error("Couldn't read from file '%s'", filename.raw.c_str());
+        Error("Impossible de lire le fichier '%s'", filename.raw.c_str());
         return false;
     }
 
@@ -1022,7 +1022,7 @@ bool SolveSpaceUI::ReloadLinkedImage(const Platform::Path &saveFile,
             *filename = dialog->GetFilename();
             pixmap = Pixmap::ReadPng(*filename);
             if(pixmap == NULL) {
-                Error("The image '%s' is corrupted.", filename->raw.c_str());
+                Error("L'image '%s' est corrompue.", filename->raw.c_str());
             }
             // We know where the file is now, good.
         } else if(canCancel) {

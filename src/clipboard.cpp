@@ -495,33 +495,33 @@ void TextWindow::ScreenPasteTransformed(int link, uint32_t v) {
 }
 
 void TextWindow::ShowPasteTransformed() {
-    Printf(true, "%FtPASTE TRANSFORMED%E");
-    Printf(true,  "%Ba   %Ftrepeat%E    %d time%s %Fl%Lt%f[change]%E",
-        shown.paste.times, (shown.paste.times == 1) ? "" : "s",
+    Printf(true, "%FtCOLLER TRANSFORMÉ%E");
+    Printf(true,  "%Ba   %Ftrépéter%E   %d fois%s %Fl%Lt%f[modifier]%E",
+        shown.paste.times, "",
         &ScreenChangePasteTransformed);
-    Printf(false, "%Bd   %Ftrotate%E    %@ degrees %Fl%Lr%f[change]%E",
+    Printf(false, "%Bd   %Ftrotation%E  %@ degrés %Fl%Lr%f[modifier]%E",
         shown.paste.theta*180/PI,
         &ScreenChangePasteTransformed);
-    Printf(false, "%Ba   %Ftabout pt%E  (%s, %s, %s) %Fl%Lo%f[use selected]%E",
+    Printf(false, "%Ba   %Ftautour de%E (%s, %s, %s) %Fl%Lo%f[sélection]%E",
             SS.MmToString(shown.paste.origin.x).c_str(),
             SS.MmToString(shown.paste.origin.y).c_str(),
             SS.MmToString(shown.paste.origin.z).c_str(),
         &ScreenPasteTransformed);
-    Printf(false, "%Bd   %Fttranslate%E (%s, %s, %s) %Fl%Lt%f[use selected]%E",
+    Printf(false, "%Bd   %Ftdécaler%E   (%s, %s, %s) %Fl%Lt%f[sélection]%E",
             SS.MmToString(shown.paste.trans.x).c_str(),
             SS.MmToString(shown.paste.trans.y).c_str(),
             SS.MmToString(shown.paste.trans.z).c_str(),
         &ScreenPasteTransformed);
-    Printf(false, "%Ba   %Ftscale%E     %@ %Fl%Ls%f[change]%E",
+    Printf(false, "%Ba   %Ftéchelle%E   %@ %Fl%Ls%f[modifier]%E",
         fabs(shown.paste.scale),
         &ScreenChangePasteTransformed);
-    Printf(false, "%Ba   %Ftmirror%E    %Fd%Lf%f%s  flip%E",
+    Printf(false, "%Ba   %Ftmiroir%E    %Fd%Lf%f%s  retourner%E",
         &ScreenChangePasteTransformed,
         shown.paste.scale < 0 ? CHECK_TRUE : CHECK_FALSE);
 
-    Printf(true, " %Fl%Lg%fpaste transformed now%E", &ScreenPasteTransformed);
+    Printf(true, " %Fl%Lg%fcoller maintenant%E", &ScreenPasteTransformed);
 
-    Printf(true, "(or %Fl%Ll%fcancel operation%E)", &ScreenHome);
+    Printf(true, "(ou %Fl%Ll%fannuler l'opération%E)", &ScreenHome);
 }
 
 } // namespace SolveSpace

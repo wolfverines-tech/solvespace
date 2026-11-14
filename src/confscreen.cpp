@@ -216,10 +216,10 @@ void TextWindow::ScreenChangeAnimationSpeed(int link, uint32_t v) {
 
 void TextWindow::ShowConfiguration() {
     int i;
-    Printf(true, "%Ft user color (r, g, b)");
+    Printf(true, "%Ft couleurs personnalisées (r, v, b)");
 
     for(i = 0; i < SS.MODEL_COLORS; i++) {
-        Printf(false, "%Bp   #%d:  %Bz  %Bp  (%@, %@, %@) %f%D%Ll%Fl[change]%E",
+        Printf(false, "%Bp   #%d:  %Bz  %Bp  (%@, %@, %@) %f%D%Ll%Fl[modifier]%E",
             (i & 1) ? 'd' : 'a',
             i, &SS.modelColor[i],
             (i & 1) ? 'd' : 'a',
@@ -230,77 +230,77 @@ void TextWindow::ShowConfiguration() {
     }
 
     Printf(false, "");
-    Printf(false, "%Ft chord tolerance (in percents)%E");
-    Printf(false, "%Ba   %@ %% %Fl%Ll%f%D[change]%E; %@ mm, %d triangles",
+    Printf(false, "%Ft tolérance de corde (en pourcentage)%E");
+    Printf(false, "%Ba   %@ %% %Fl%Ll%f%D[modifier]%E; %@ mm, %d triangles",
         SS.chordTol,
         &ScreenChangeChordTolerance, 0, SS.chordTolCalculated,
         SK.GetGroup(SS.GW.activeGroup)->displayMesh.l.n);
-    Printf(false, "%Ft max piecewise linear segments%E");
-    Printf(false, "%Ba   %d %Fl%Ll%f[change]%E",
+    Printf(false, "%Ft nombre max. de segments par courbe%E");
+    Printf(false, "%Ba   %d %Fl%Ll%f[modifier]%E",
         SS.maxSegments,
         &ScreenChangeMaxSegments);
 
     Printf(false, "");
-    Printf(false, "%Ft export chord tolerance (in mm)%E");
-    Printf(false, "%Ba   %@ %Fl%Ll%f%D[change]%E",
+    Printf(false, "%Ft tolérance de corde à l'export (en mm)%E");
+    Printf(false, "%Ba   %@ %Fl%Ll%f%D[modifier]%E",
         SS.exportChordTol,
         &ScreenChangeExportChordTolerance, 0);
-    Printf(false, "%Ft export max piecewise linear segments%E");
-    Printf(false, "%Ba   %d %Fl%Ll%f[change]%E",
+    Printf(false, "%Ft nombre max. de segments à l'export%E");
+    Printf(false, "%Ba   %d %Fl%Ll%f[modifier]%E",
         SS.exportMaxSegments,
         &ScreenChangeExportMaxSegments);
 
-    Printf(false, "%Ft snap grid spacing%E");
-    Printf(false, "%Ba   %s %Fl%Ll%f%D[change]%E",
+    Printf(false, "%Ft pas de la grille d'accrochage%E");
+    Printf(false, "%Ba   %s %Fl%Ll%f%D[modifier]%E",
         SS.MmToString(SS.gridSpacing).c_str(),
         &ScreenChangeGridSpacing, 0);
 
     Printf(false, "");
-    Printf(false, "%Ft digits after decimal point to show%E");
-    Printf(false, "%Ba%Ft   distances: %Fd%d %Fl%Ll%f%D[change]%E (e.g. '%s')",
+    Printf(false, "%Ft nombre de décimales affichées%E");
+    Printf(false, "%Ba%Ft   distances : %Fd%d %Fl%Ll%f%D[modifier]%E (ex. '%s')",
         SS.UnitDigitsAfterDecimal(),
         &ScreenChangeDigitsAfterDecimal, 0,
         SS.MmToString(SS.StringToMm("1.23456789")).c_str());
-    Printf(false, "%Bd%Ft   angles:    %Fd%d %Fl%Ll%f%D[change]%E (e.g. '%s')",
+    Printf(false, "%Bd%Ft   angles :    %Fd%d %Fl%Ll%f%D[modifier]%E (ex. '%s')",
         SS.afterDecimalDegree,
         &ScreenChangeDigitsAfterDecimalDegree, 0,
         SS.DegreeToString(1.23456789).c_str());
-    Printf(false, "  %Fd%f%Ll%s  use SI prefixes for distances%E",
+    Printf(false, "  %Fd%f%Ll%s  préfixes SI pour les distances (µm, km…)%E",
         &ScreenChangeUseSIPrefixes,
         SS.useSIPrefixes ? CHECK_TRUE : CHECK_FALSE);
 
     Printf(false, "");
-    Printf(false, "%Ft export scale factor (1:1=mm, 1:25.4=inch)");
-    Printf(false, "%Ba   1:%# %Fl%Ll%f%D[change]%E",
+    Printf(false, "%Ft échelle d'export (1:1=mm, 1:25.4=pouce)");
+    Printf(false, "%Ba   1:%# %Fl%Ll%f%D[modifier]%E",
         (double)SS.exportScale,
         &ScreenChangeExportScale, 0);
-    Printf(false, "%Ft cutter radius offset (0=no offset) ");
-    Printf(false, "%Ba   %s %Fl%Ll%f%D[change]%E",
+    Printf(false, "%Ft compensation du rayon d'outil (0=aucune) ");
+    Printf(false, "%Ba   %s %Fl%Ll%f%D[modifier]%E",
         SS.MmToString(SS.exportOffset).c_str(),
         &ScreenChangeExportOffset, 0);
 
     Printf(false, "");
-    Printf(false, "  %Fd%f%Ll%s  export shaded 2d triangles%E",
+    Printf(false, "  %Fd%f%Ll%s  exporter les triangles 2D ombrés%E",
         &ScreenChangeShadedTriangles,
         SS.exportShadedTriangles ? CHECK_TRUE : CHECK_FALSE);
     if(fabs(SS.exportOffset) > LENGTH_EPS) {
-        Printf(false, "  %Fd%s  curves as piecewise linear%E "
-                      "(since cutter radius is not zero)", CHECK_TRUE);
+        Printf(false, "  %Fd%s  courbes en segments%E "
+                      "(car le rayon d'outil n'est pas nul)", CHECK_TRUE);
     } else {
-        Printf(false, "  %Fd%f%Ll%s  export curves as piecewise linear%E",
+        Printf(false, "  %Fd%f%Ll%s  exporter les courbes en segments%E",
             &ScreenChangePwlCurves,
             SS.exportPwlCurves ? CHECK_TRUE : CHECK_FALSE);
     }
-    Printf(false, "  %Fd%f%Ll%s  fix white exported lines%E",
+    Printf(false, "  %Fd%f%Ll%s  corriger les lignes blanches à l'export%E",
         &ScreenChangeFixExportColors,
         SS.fixExportColors ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  export background color%E",
+    Printf(false, "  %Fd%f%Ll%s  exporter la couleur de fond%E",
         &ScreenChangeExportBackgroundColor,
         SS.exportBackgroundColor ? CHECK_TRUE : CHECK_FALSE);
 
     Printf(false, "");
-    Printf(false, "%Ft export canvas size:  "
-                  "%f%Fd%Lf%s fixed%E  "
+    Printf(false, "%Ft taille de la feuille exportée :  "
+                  "%f%Fd%Lf%s fixe%E  "
                   "%f%Fd%Lt%s auto%E",
         &ScreenChangeCanvasSizeAuto,
         !SS.exportCanvasSizeAuto ? RADIO_TRUE : RADIO_FALSE,
@@ -308,88 +308,88 @@ void TextWindow::ShowConfiguration() {
         SS.exportCanvasSizeAuto ? RADIO_TRUE : RADIO_FALSE);
 
     if(SS.exportCanvasSizeAuto) {
-        Printf(false, "%Ft (by margins around exported geometry)");
-        Printf(false, "%Ba%Ft   left:   %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Ft (par marges autour de la géométrie)");
+        Printf(false, "%Ba%Ft   gauche : %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportMargin.left).c_str(), &ScreenChangeCanvasSize, 0);
-        Printf(false, "%Bd%Ft   right:  %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Bd%Ft   droite : %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportMargin.right).c_str(), &ScreenChangeCanvasSize, 1);
-        Printf(false, "%Ba%Ft   bottom: %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Ba%Ft   bas :    %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportMargin.bottom).c_str(), &ScreenChangeCanvasSize, 2);
-        Printf(false, "%Bd%Ft   top:    %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Bd%Ft   haut :   %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportMargin.top).c_str(), &ScreenChangeCanvasSize, 3);
     } else {
-        Printf(false, "%Ft (by absolute dimensions and offsets)");
-        Printf(false, "%Ba%Ft   width:    %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Ft (par dimensions et décalages absolus)");
+        Printf(false, "%Ba%Ft   largeur :  %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportCanvas.width).c_str(), &ScreenChangeCanvasSize, 10);
-        Printf(false, "%Bd%Ft   height:   %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Bd%Ft   hauteur :  %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportCanvas.height).c_str(), &ScreenChangeCanvasSize, 11);
-        Printf(false, "%Ba%Ft   offset x: %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Ba%Ft   décal. x : %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportCanvas.dx).c_str(), &ScreenChangeCanvasSize, 12);
-        Printf(false, "%Bd%Ft   offset y: %Fd%s %Fl%Ll%f%D[change]%E",
+        Printf(false, "%Bd%Ft   décal. y : %Fd%s %Fl%Ll%f%D[modifier]%E",
             SS.MmToString(SS.exportCanvas.dy).c_str(), &ScreenChangeCanvasSize, 13);
     }
 
     Printf(false, "");
-    Printf(false, "%Ft exported g code parameters");
-    Printf(false, "%Ba%Ft   depth:     %Fd%s %Fl%Ld%f[change]%E",
+    Printf(false, "%Ft paramètres du G-code exporté");
+    Printf(false, "%Ba%Ft   profondeur : %Fd%s %Fl%Ld%f[modifier]%E",
         SS.MmToString(SS.gCode.depth).c_str(), &ScreenChangeGCodeParameter);
-    Printf(false, "%Bd%Ft   passes:    %Fd%d %Fl%Ls%f[change]%E",
+    Printf(false, "%Bd%Ft   passes :     %Fd%d %Fl%Ls%f[modifier]%E",
         SS.gCode.passes, &ScreenChangeGCodeParameter);
-    Printf(false, "%Ba%Ft   feed:      %Fd%s %Fl%LF%f[change]%E",
+    Printf(false, "%Ba%Ft   avance :     %Fd%s %Fl%LF%f[modifier]%E",
         SS.MmToString(SS.gCode.feed).c_str(), &ScreenChangeGCodeParameter);
-    Printf(false, "%Bd%Ft   plunge fd: %Fd%s %Fl%LP%f[change]%E",
+    Printf(false, "%Bd%Ft   plongée :    %Fd%s %Fl%LP%f[modifier]%E",
         SS.MmToString(SS.gCode.plungeFeed).c_str(), &ScreenChangeGCodeParameter);
 
     Printf(false, "");
-    Printf(false, "  %Fd%f%Ll%s  draw triangle back faces in red%E",
+    Printf(false, "  %Fd%f%Ll%s  faces arrière des triangles en rouge%E",
         &ScreenChangeBackFaces,
         SS.drawBackFaces ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  check sketch for closed contour%E",
+    Printf(false, "  %Fd%f%Ll%s  vérifier que le contour est fermé%E",
         &ScreenChangeCheckClosedContour,
         SS.checkClosedContour ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  show areas of closed contours%E",
+    Printf(false, "  %Fd%f%Ll%s  afficher l'aire des contours fermés%E",
         &ScreenChangeShowContourAreas,
         SS.showContourAreas ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  enable automatic line constraints%E",
+    Printf(false, "  %Fd%f%Ll%s  contraintes de ligne automatiques%E",
         &ScreenChangeAutomaticLineConstraints,
         SS.automaticLineConstraints ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  use camera mouse navigation%E", &ScreenChangeCameraNav,
+    Printf(false, "  %Fd%f%Ll%s  navigation souris type caméra%E", &ScreenChangeCameraNav,
         SS.cameraNav ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  use turntable mouse navigation%E", &ScreenChangeTurntableNav,
+    Printf(false, "  %Fd%f%Ll%s  navigation souris type plateau tournant%E", &ScreenChangeTurntableNav,
         SS.turntableNav ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  edit newly added dimensions%E",
+    Printf(false, "  %Fd%f%Ll%s  saisir la valeur des nouvelles cotes%E",
         &ScreenChangeImmediatelyEditDimension,
         SS.immediatelyEditDimension ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  arc default is diameter%E",
+    Printf(false, "  %Fd%f%Ll%s  coter les arcs en diamètre par défaut%E",
         &ScreenChangeArcDimDefault,
         SS.arcDimDefaultDiameter ? CHECK_TRUE : CHECK_FALSE);
-    Printf(false, "  %Fd%f%Ll%s  display the full path in the title bar%E",
+    Printf(false, "  %Fd%f%Ll%s  chemin complet dans la barre de titre%E",
            &ScreenChangeShowFullFilePath, SS.showFullFilePath ? CHECK_TRUE : CHECK_FALSE);
     Printf(false, "");
-    Printf(false, "%Ft autosave interval (in minutes)%E");
-    Printf(false, "%Ba   %d %Fl%Ll%f[change]%E",
+    Printf(false, "%Ft sauvegarde automatique (en minutes)%E");
+    Printf(false, "%Ba   %d %Fl%Ll%f[modifier]%E",
         SS.autosaveInterval, &ScreenChangeAutosaveInterval);
     Printf(false, "");
-    Printf(false, "%Ft redundant constraint timeout (in ms)%E");
-    Printf(false, "%Ba   %d %Fl%Ll%f[change]%E",
+    Printf(false, "%Ft délai de recherche des redondances (en ms)%E");
+    Printf(false, "%Ba   %d %Fl%Ll%f[modifier]%E",
         SS.timeoutRedundantConstr, &ScreenChangeFindConstraintTimeout);
     Printf(false, "");
-    Printf(false, "%Ft animation speed (in ms; 0 to disable)%E");
-    Printf(false, "%Ba   %d %Fl%Ll%f[change]%E",
+    Printf(false, "%Ft durée des animations (en ms ; 0 = aucune)%E");
+    Printf(false, "%Ba   %d %Fl%Ll%f[modifier]%E",
         SS.animationSpeed, &ScreenChangeAnimationSpeed);
 
     if(canvas) {
         const char *gl_vendor, *gl_renderer, *gl_version;
         canvas->GetIdent(&gl_vendor, &gl_renderer, &gl_version);
         Printf(false, "");
-        Printf(false, " %Ftgl vendor   %E%s", gl_vendor);
-        Printf(false, " %Ft   renderer %E%s", gl_renderer);
-        Printf(false, " %Ft   version  %E%s", gl_version);
+        Printf(false, " %Ftfabricant GL %E%s", gl_vendor);
+        Printf(false, " %Ft   rendu      %E%s", gl_renderer);
+        Printf(false, " %Ft   version    %E%s", gl_version);
     }
 
     #if defined(_OPENMP)
-        Printf(false, " %FtOpenMP enabled");
-        Printf(false, " %Ft   threads  %E%d", omp_get_max_threads());
+        Printf(false, " %FtOpenMP activé");
+        Printf(false, " %Ft   threads    %E%d", omp_get_max_threads());
     #endif
 }
 

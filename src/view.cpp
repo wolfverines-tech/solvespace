@@ -9,19 +9,19 @@
 namespace SolveSpace {
 
 void TextWindow::ShowEditView() {
-    Printf(true, "%Ft3D VIEW PARAMETERS%E");
+    Printf(true, "%FtPARAMÈTRES DE LA VUE 3D%E");
 
-    Printf(true,  "%Bd %Ftoverall scale factor%E");
-    Printf(false, "%Ba   %# px/%s %Fl%Ll%f[edit]%E",
+    Printf(true,  "%Bd %Ftfacteur d'échelle général%E");
+    Printf(false, "%Ba   %# px/%s %Fl%Ll%f[modifier]%E",
         SS.GW.scale * SS.MmPerUnit(),
         SS.UnitName(),
         &ScreenChangeViewScale);
-    Printf(false, "%Bd   %Fl%Ll%fset to full scale%E",
+    Printf(false, "%Bd   %Fl%Ll%fmettre à l'échelle 1:1%E",
         &ScreenChangeViewToFullScale);
     Printf(false, "");
 
-    Printf(false, "%Bd %Ftorigin (maps to center of screen)%E");
-    Printf(false, "%Ba   (%s, %s, %s) %Fl%Ll%f[edit]%E",
+    Printf(false, "%Bd %Ftorigine (au centre de l'écran)%E");
+    Printf(false, "%Ba   (%s, %s, %s) %Fl%Ll%f[modifier]%E",
         SS.MmToString(-SS.GW.offset.x).c_str(),
         SS.MmToString(-SS.GW.offset.y).c_str(),
         SS.MmToString(-SS.GW.offset.z).c_str(),
@@ -29,21 +29,21 @@ void TextWindow::ShowEditView() {
     Printf(false, "");
 
     Vector n = (SS.GW.projRight).Cross(SS.GW.projUp);
-    Printf(false, "%Bd %Ftprojection onto screen%E");
-    Printf(false, "%Ba   %Ftright%E (%3, %3, %3) %Fl%Ll%f[edit]%E",
+    Printf(false, "%Bd %Ftprojection à l'écran%E");
+    Printf(false, "%Ba   %Ftdroite%E (%3, %3, %3) %Fl%Ll%f[modifier]%E",
         CO(SS.GW.projRight),
         &ScreenChangeViewProjection);
-    Printf(false, "%Bd   %Ftup%E    (%3, %3, %3)", CO(SS.GW.projUp));
-    Printf(false, "%Ba   %Ftout%E   (%3, %3, %3)", CO(n));
+    Printf(false, "%Bd   %Fthaut%E   (%3, %3, %3)", CO(SS.GW.projUp));
+    Printf(false, "%Ba   %Ftavant%E  (%3, %3, %3)", CO(n));
     Printf(false, "");
 
-    Printf(false, "%Ft perspective factor (0 for parallel)%E");
-    Printf(false, "%Ba   %# %Fl%Ll%f%D[change]%E",
+    Printf(false, "%Ft facteur de perspective (0 = parallèle)%E");
+    Printf(false, "%Ba   %# %Fl%Ll%f%D[modifier]%E",
         SS.cameraTangent*1000,
         &ScreenChangeCameraTangent, 0);
 
     Printf(false, "");
-    Printf(false, "%Ft light direction               intensity");
+    Printf(false, "%Ft direction de la lumière       intensité");
     for(int i = 0; i < 2; i++) {
         Printf(false, "%Bp   #%d  (%2,%2,%2)%Fl%D%f%Ll[c]%E "
                       "%2 %Fl%D%f%Ll[c]%E",
@@ -51,12 +51,12 @@ void TextWindow::ShowEditView() {
             CO(SS.lightDir[i]), i, &ScreenChangeLightDirection,
             SS.lightIntensity[i], i, &ScreenChangeLightIntensity);
     }
-    Printf(false, "%Ba         ambient lighting     %2 %Fl%f%Ll[c]%E",
+    Printf(false, "%Ba         éclairage ambiant    %2 %Fl%f%Ll[c]%E",
         SS.ambientIntensity, &ScreenChangeLightAmbient);
 
     Printf(false, "");
-    Printf(false, "%Ft explode distance%E");
-    Printf(false, "%Ba   %s %Fl%Ll%f%D[change]%E",
+    Printf(false, "%Ft distance de la vue éclatée%E");
+    Printf(false, "%Ba   %s %Fl%Ll%f%D[modifier]%E",
         SS.MmToString(SS.explodeDistance).c_str(),
         &ScreenChangeExplodeDistance, 0);
 

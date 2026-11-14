@@ -44,7 +44,7 @@ public:
             : variable(variable), tooltip(tooltip), iconName(iconName) {}
 
     std::string Tooltip() override {
-        return ((*variable) ? "Hide " : "Show ") + tooltip;
+        return ((*variable) ? "Masquer : " : "Afficher : ") + tooltip;
     }
 
     void Draw(UiCanvas *uiCanvas, int x, int y, bool asHovered) override {
@@ -78,9 +78,9 @@ public:
 
     std::string Tooltip() override {
         if(*variable) {
-            return "Don't make faces selectable with mouse";
+            return "Ne pas rendre les faces sélectionnables";
         } else {
-            return "Make faces selectable with mouse";
+            return "Rendre les faces sélectionnables à la souris";
         }
     }
 };
@@ -148,35 +148,35 @@ public:
 static SpacerButton   spacerButton;
 
 static ShowHideButton workplanesButton =
-    { &(SS.GW.showWorkplanes),   "workplane",     "workplanes from inactive groups" };
+    { &(SS.GW.showWorkplanes),   "workplane",     "plans de travail des groupes inactifs" };
 static ShowHideButton normalsButton =
-    { &(SS.GW.showNormals),      "normal",        "normals"                         };
+    { &(SS.GW.showNormals),      "normal",        "normales"                         };
 static ShowHideButton pointsButton =
     { &(SS.GW.showPoints),       "point",         "points"                          };
 static ShowHideButton constructionButton =
-    { &(SS.GW.showConstruction), "construction",  "construction entities"           };
+    { &(SS.GW.showConstruction), "construction",  "entités de construction"           };
 static TriStateButton constraintsButton  = {
     (unsigned *)(&(SS.GW.showConstraints)),
     {(unsigned)GraphicsWindow::ShowConstraintMode::SCM_SHOW_ALL,
      (unsigned)GraphicsWindow::ShowConstraintMode::SCM_SHOW_DIM,
      (unsigned)GraphicsWindow::ShowConstraintMode::SCM_NOSHOW},
-    {"Show only dimensions", "Hide constraints and dimensions", "Show constraints and dimensions"},
+    {"Afficher uniquement les cotes", "Masquer contraintes et cotes", "Afficher contraintes et cotes"},
     {"constraint", "constraint-dimo", "constraint-wo"}};
 static FacesButton facesButton;
 static ShowHideButton shadedButton =
-    { &(SS.GW.showShaded),       "shaded",        "shaded view of solid model"      };
+    { &(SS.GW.showShaded),       "shaded",        "rendu ombré du volume"      };
 static ShowHideButton edgesButton =
-    { &(SS.GW.showEdges),        "edges",         "edges of solid model"            };
+    { &(SS.GW.showEdges),        "edges",         "arêtes du volume"            };
 static ShowHideButton outlinesButton =
-    { &(SS.GW.showOutlines),     "outlines",      "outline of solid model"          };
+    { &(SS.GW.showOutlines),     "outlines",      "contour du volume"          };
 static ShowHideButton meshButton =
-    { &(SS.GW.showMesh),         "mesh",          "triangle mesh of solid model"    };
+    { &(SS.GW.showMesh),         "mesh",          "maillage triangulaire du volume"    };
 static TriStateButton occludedLinesButton = {
     (unsigned *)(&(SS.GW.drawOccludedAs)),
     {(unsigned)GraphicsWindow::DrawOccludedAs::INVISIBLE,
      (unsigned)GraphicsWindow::DrawOccludedAs::STIPPLED,
      (unsigned)GraphicsWindow::DrawOccludedAs::VISIBLE},
-    {"Stipple occluded lines", "Draw occluded lines", "Don't draw occluded lines"},
+    {"Lignes cachées en pointillés", "Afficher les lignes cachées", "Masquer les lignes cachées"},
     {"occluded-invisible", "occluded-stippled", "occluded-visible"}};
 
 static Button *buttons[] = {
@@ -558,7 +558,7 @@ void TextWindow::Show() {
         ShowHeader(false);
         Printf(false, "");
         Printf(false, "%s", SS.GW.pending.description);
-        Printf(true, "%Fl%f%Ll(cancel operation)%E",
+        Printf(true, "%Fl%f%Ll(annuler l'opération)%E",
             &TextWindow::ScreenUnselectAll);
     } else if((gs.n > 0 || gs.constraints > 0) &&
                                     shown.screen != Screen::PASTE_TRANSFORMED)
